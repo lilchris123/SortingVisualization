@@ -1,0 +1,4 @@
+Visualization Of Sorting Algorithms
+- SFML framework required
+
+This program allows you to visualize sorting algoritms like selection sort, bubble sort, and insertion sort in action.
