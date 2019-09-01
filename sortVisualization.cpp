@@ -15,15 +15,9 @@ void handleEvent(sf::RenderWindow& window) {
 	}
 }
 //draws text on the window
-void drawText(sf::RenderWindow &window, const string str, sf::Vector2f position)
+void drawText(sf::RenderWindow &window, const string str, sf::Vector2f position, const sf::Font &font)
 {
 	sf::Text cmpTxt;
-	sf::Font font;
-	if (!font.loadFromFile("font.TTF"))
-	{
-		cerr<<"font failed to be loaded!";
-		return; //error occured
-	}
 	cmpTxt.setFont(font);
 	cmpTxt.setString(str);
 	cmpTxt.setPosition(position);
@@ -31,7 +25,7 @@ void drawText(sf::RenderWindow &window, const string str, sf::Vector2f position)
 	window.draw(cmpTxt);
 }
 // visual representation of the list
-void visualize(vector<int> &list, sf::RenderWindow &window, const int HEIGHT, int comparisons)
+void visualize(vector<int> &list, sf::RenderWindow &window, const int HEIGHT, int comparisons,const sf::Font &font)
 {
 	window.clear();
 	handleEvent(window);
@@ -43,11 +37,11 @@ void visualize(vector<int> &list, sf::RenderWindow &window, const int HEIGHT, in
 		line.setFillColor(sf::Color::Blue);
 		window.draw(line);
 	}
-	drawText(window, "# of comparisons: " + to_string(comparisons),sf::Vector2f(1,1));
+	drawText(window, "# of comparisons: " + to_string(comparisons),sf::Vector2f(1,1),font);
 	window.display();
 }
 //selection sort algorithm returns time taken to sort list
-sf::Time selectionSort(vector<int> &list, sf::RenderWindow &window, const int HEIGHT) {
+sf::Time selectionSort(vector<int> &list, sf::RenderWindow &window, const int HEIGHT, const sf::Font &font) {
 	sf::Time total_time;
 	sf::Clock clock;
 
@@ -63,12 +57,12 @@ sf::Time selectionSort(vector<int> &list, sf::RenderWindow &window, const int HE
 		}
 		swap(list[minimum], list[i]);
 		total_time += clock.getElapsedTime();
-		visualize(list, window, HEIGHT, comparisons);
+		visualize(list, window, HEIGHT, comparisons, font);
 		clock.restart();
 	}
 	return total_time;
 }
-sf::Time bubbleSort(vector<int> &list, sf::RenderWindow& window, const int HEIGHT)
+sf::Time bubbleSort(vector<int> &list, sf::RenderWindow& window, const int HEIGHT, const sf::Font &font)
 {
 	sf::Time total_time;
 	int comparisons = 0;
@@ -86,13 +80,13 @@ sf::Time bubbleSort(vector<int> &list, sf::RenderWindow& window, const int HEIGH
 			}
 			comparisons++;
 			total_time += clock.getElapsedTime();
-			visualize(list, window, HEIGHT, comparisons);
+			visualize(list, window, HEIGHT, comparisons, font);
 			clock.restart();
 		}
 	}
 	return total_time;
 }
-sf::Time insertionSort(vector<int> &list, sf::RenderWindow& window, const int HEIGHT)
+sf::Time insertionSort(vector<int> &list, sf::RenderWindow& window, const int HEIGHT, const sf::Font &font)
 {
 	sf::Time total_time;
 	int comparisons = 0;
@@ -106,7 +100,7 @@ sf::Time insertionSort(vector<int> &list, sf::RenderWindow& window, const int HE
 			j--;
 			comparisons++;
 			total_time += clock.getElapsedTime();
-			visualize(list, window, HEIGHT, comparisons);
+			visualize(list, window, HEIGHT, comparisons,font );
 			clock.restart();
 		}
 	}
@@ -134,6 +128,13 @@ int main() {
 	std::cin >> HEIGHT;
 	cout << "Enter Algorithm: 1)Selection Sort 2)Bubble Sort 3)Insertion Sort " << endl;
 	std::cin >> algo;
+    
+    sf::Font font;
+    if (!font.loadFromFile("../font.TTF"))
+    {
+        cerr<<"font failed to be loaded!";
+        return; //error occured
+    }
 
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sorting Visualization");
 
@@ -144,22 +145,22 @@ int main() {
 	{
 	case 1:
 		window.setTitle("Selection Sort");
-		time_taken = selectionSort(list, window, HEIGHT);
-		drawText(window, "Time taken: " + to_string(time_taken.asSeconds()) + " sec", sf::Vector2f(1, 45));
+		time_taken = selectionSort(list, window, HEIGHT, font);
+		drawText(window, "Time taken: " + to_string(time_taken.asSeconds()) + " sec", sf::Vector2f(1, 45),font);
 		break;
 	case 2:
 		window.setTitle("Bubble Sort");
-		time_taken = bubbleSort(list, window, HEIGHT);
-		drawText(window, "Time taken: " + to_string(time_taken.asSeconds()) + " sec", sf::Vector2f(1, 45));
+		time_taken = bubbleSort(list, window, HEIGHT, font);
+		drawText(window, "Time taken: " + to_string(time_taken.asSeconds()) + " sec", sf::Vector2f(1, 45),font);
 		break;
 	case 3:
 		window.setTitle("Insertion Sort");
-		time_taken = insertionSort(list, window, HEIGHT);
-		drawText(window, "Time taken: " + to_string(time_taken.asSeconds()) + " sec", sf::Vector2f(1, 45));
+		time_taken = insertionSort(list, window, HEIGHT, font);
+		drawText(window, "Time taken: " + to_string(time_taken.asSeconds()) + " sec", sf::Vector2f(1, 45),font);
 		break;
 	default:
 		window.clear();
-		drawText(window, "Unavailable option!", sf::Vector2f(WIDTH / 4, HEIGHT / 3));
+		drawText(window, "Unavailable option!", sf::Vector2f(WIDTH / 4, HEIGHT / 3),font);
 		break;
 	}
 	window.display();
