@@ -130,10 +130,10 @@ int main() {
 	std::cin >> algo;
     
     sf::Font font;
-    if (!font.loadFromFile("../font.TTF"))
+    if (!font.loadFromFile("font.TTF"))
     {
         cerr<<"font failed to be loaded!";
-        return; //error occured
+        return 1; //error occured
     }
 
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sorting Visualization");
